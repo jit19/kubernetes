@@ -62,3 +62,42 @@ EOF
 sudo yum install -y kubelet kubeadm kubectl --disableexcludes=kubernetes
 sudo systemctl enable --now kubelet
 ```
+### 3.  Initialize kubernets cluster on Master node(Run this only on master)
+```sh
+sudo kubeadm init
+```
+## 4. Do following setup to start using kubernetes cluster(Run this only on master)
+```sh
+  mkdir -p $HOME/.kube
+  sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+  sudo chown $(id -u):$(id -g) $HOME/.kube/config
+  ```
+  ### 5. Add pod network add-ons (Run this only on master)
+  ```sh
+  kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version=$(kubectl version | base64 | tr -d '\n')"
+  ```
+  ### 6. Add Pod Network add-ons by Calico
+      1. Install Calico with Kubernetes API datastore
+      2. Download the Calico networking manifest for the Kubernetes API datastore
+  ```sh
+  curl https://docs.projectcalico.org/manifests/calico-typha.yaml -o calico.yaml
+  kubectl apply -f calico.yaml
+  ```
+  ### Install Calico with etcd datastore.
+  ```sh
+  curl https://docs.projectcalico.org/manifests/calico-etcd.yaml -o calico.yaml
+  kubectl apply -f calico.yaml
+  ```
+  ## 7.Take note of kubeadm command and run on all workers
+  ```sh
+  Run this command(replace with your command) on every node to join the cluster
+
+  sudo kubeadm join 172.31.44.226:6443 --token f6o4a3.jdagdd4e2h8xhzy1 \
+    --discovery-token-ca-cert-hash sha256:d0528baca6a2cf15bfece995d7df6f5d018b233b54251716ce2fd984148ba6d6
+ ```
+ ## 8. Get list of nodes in the cluster (Run this on master)
+ ```sh
+ kubectly get nodes
+ ```
+  
+  
