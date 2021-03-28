@@ -99,5 +99,9 @@ sudo kubeadm init
  ```sh
  kubectly get nodes
  ```
+ ## use this link for Calico Network- Installtion
+ ```sh
+ https://docs.projectcalico.org/getting-started/kubernetes/self-managed-onprem/onpremises
+ ```
   
   
